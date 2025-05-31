@@ -79,8 +79,7 @@ services:
     volumes:
       - open-webui:/app/backend/data
 
-services:
-  app:
+  nginx:
     image: 'docker.io/jc21/nginx-proxy-manager:latest'
     restart: unless-stopped
     ports:
