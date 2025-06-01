@@ -4,7 +4,6 @@ volumes:
   ollama_storage:
   qdrant_storage:
   open-webui:
-  flowise:
 
 networks:
   demo:
