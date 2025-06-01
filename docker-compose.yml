@@ -32,7 +32,7 @@ services:
     restart: unless-stopped
     container_name: open-webui
     ports:
-      - "127.0.0.1:3000:8080"
+      - "127.0.0.1:3003:8080"
     volumes:
       - open-webui:/app/backend/data
 
