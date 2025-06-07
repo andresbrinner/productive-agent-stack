@@ -1,7 +1,7 @@
 volumes:
   open-webui:
-  postgres_storage:
   qdrant_storage:
+  postgres_storage:
   n8n_storage:
   ollama_storage:
 
@@ -19,6 +19,17 @@ services:
       - "127.0.0.1:3003:8080"
     volumes:
       - open-webui:/app/backend/data
+
+  qdrant:
+    image: qdrant/qdrant
+    container_name: qdrant
+    hostname: qdrant
+    networks: ['demo']
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:6333:6333"
+    volumes:
+      - qdrant_storage:/qdrant/storage
 
   postgres:
     image: postgres:16-alpine
@@ -47,22 +58,11 @@ services:
     networks: ['demo']
     environment:
       - PGADMIN_DEFAULT_EMAIL=${PGADMIN_USER}
-      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_USER}
+      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_PASSWORD}
     ports:
       - "127.0.0.1:5050:5050"
     depends_on:
       - postgres
-  
-  qdrant:
-    image: qdrant/qdrant
-    container_name: qdrant
-    hostname: qdrant
-    networks: ['demo']
-    restart: unless-stopped
-    ports:
-      - "127.0.0.1:6333:6333"
-    volumes:
-      - qdrant_storage:/qdrant/storage
   
   n8n:
     image: n8nio/n8n:latest
@@ -100,10 +100,11 @@ services:
   ollama:
     image: ollama/ollama:latest
     container_name: ollama
+    hostname: ollama
     networks: ['demo']
     restart: unless-stopped
     ports:
-      - "127.0.0.1:11434:11434
+      - "127.0.0.1:11434:11434"
     volumes:
       - ollama_storage:/root/.ollama
     entrypoint: /bin/sh
