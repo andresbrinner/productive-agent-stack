@@ -33,6 +33,8 @@ services:
 
   postgres:
     image: postgres:16-alpine
+    hostname: postgres
+    container_name: postgres
     networks: ['demo']
     restart: unless-stopped
     ports:
@@ -65,7 +67,6 @@ services:
   n8n:
     image: n8nio/n8n:latest
     container_name: n8n
-    hostname: n8n
     networks: ['demo']
     restart: unless-stopped
     environment:
@@ -87,6 +88,8 @@ services:
       - "127.0.0.1:5678:5678"
     volumes:
       - n8n_storage:/home/node/.n8n
+      - ./n8n/demo-data:/demo-data
+      - ./shared:/data/shared
     links:
       - postgres
     depends_on:
@@ -96,7 +99,6 @@ services:
   ollama:
     image: ollama/ollama:latest
     container_name: ollama
-    hostname: ollama
     networks: ['demo']
     restart: unless-stopped
     ports:
